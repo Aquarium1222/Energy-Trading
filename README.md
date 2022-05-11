@@ -2,7 +2,8 @@
 
 #### DSAI_HW3-Energy-Trading
 
-[Guideline](https://docs.google.com/presentation/d/1ZwXe4xMflCxiDQ7RK6z_LH88r0Dp38sQ/edit#slide=id.gd2c4f7e262_0_6)
+[Guideline](https://docs.google.com/presentation/d/1ZwXe4xMflCxiDQ7RK6z_LH88r0Dp38sQ/edit#slide=id.p1)
+
 [交易資訊線上表單](https://docs.google.com/spreadsheets/d/1hqoxG48A159buQ-GuoU7Fo-QrGKYmE1DFgPckJR0dFI/edit?usp=sharing)
 
 ---
@@ -10,6 +11,7 @@
 test the code by running 
 
 ```python main.py --consumption "Consumption Data" --generation "Generation Data" --bidresult "Bidresult Data" --output output.csv```
+
 ---
 
 ## 概述（Overview）
