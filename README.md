@@ -141,8 +141,89 @@ test the code by running
 
 ## 用電量與產電量（consumption and generation）
 
+* 擁有的[資料集](https://github.com/Aquarium1222/Energy-Trading/tree/main/download/training_data)
+  * 包含 target0.csv ~ target49.csv 共 50 筆 csv 檔
+  * 每份 csv 檔皆包含 2018/1/1 12:00:00 AM ~ 2018/8/31 11:00:00 PM 的資料（共 5832 筆 = 共 5832 列）
+  * 每一列包含產電量與用電量
 
+* 分析產電量與用電量的「每小時」走勢
+  * 方法：從[資料集](https://github.com/Aquarium1222/Energy-Trading/tree/main/download/training_data) 中的 50 份 csv 檔案中隨機 sample 三份出來
+  * 圖表看法：橫軸為時間、縱軸為電力
+    * 左上圖為 target13.csv 中的每小時 generation 走勢（共 5832 筆）
+    * 右上圖為 target13.csv 中的每小時 consumption 走勢（共 5832 筆）
+    * 左中圖為 target16.csv 中的每小時 generation 走勢（共 5832 筆）
+    * 右中圖為 target16.csv 中的每小時 consumption 走勢（共 5832 筆）
+    * 左下圖為 target28.csv 中的每小時 generation 走勢（共 5832 筆）
+    * 右下圖為 target28.csv 中的每小時 consumption 走勢（共 5832 筆）
+  * <img src="./generation_target13.png" alt="" width="49.5%"/> <img src="./consumption_target13.png" alt="" width="49.5%"/>
+  * <img src="./generation_target16.png" alt="" width="49.5%"/> <img src="./consumption_target16.png" alt="" width="49.5%"/>
+  * <img src="./generation_target28.png" alt="" width="49.5%"/> <img src="./consumption_target28.png" alt="" width="49.5%"/>
+  * 發現
+    * 時間對 generation 及 consumption 具有一定程度的影響
+    * generation 皆在 0 ~ 5 之間劇烈波動
+    * consumption 在縱軸 3000 之前皆較低（2018/1/1  12:00:00 AM ~ 2018/5/5 11:00:00 PM）
+    * consumption 在縱軸 3000 之後皆較高（2018/5/6 12:00:00 AM ~ 2018/8/31 11:00:00 PM）
 
+* 分析產電量與用電量的「每日平均」走勢
+  * 方法：從[資料集](https://github.com/Aquarium1222/Energy-Trading/tree/main/download/training_data) 中的 50 份 csv 檔案中隨機 sample 三份出來
+  * 圖表看法：橫軸為時間、縱軸為電力
+    * 左上圖為 target13.csv 中的每日平均 generation 走勢（共 5832 筆）
+    * 右上圖為 target13.csv 中的每日平均 consumption 走勢（共 5832 筆）
+    * 左中圖為 target16.csv 中的每日平均 generation 走勢（共 5832 筆）
+    * 右中圖為 target16.csv 中的每日平均 consumption 走勢（共 5832 筆）
+    * 左下圖為 target28.csv 中的每日平均 generation 走勢（共 5832 筆）
+    * 右下圖為 target28.csv 中的每日平均 consumption 走勢（共 5832 筆）
+  * <img src="./reshape_con_target14.png" alt="" width="49.5%"/> <img src="./reshape_con_target14.png" alt="" width="49.5%"/>
+  * <img src="./reshape_con_target16.png" alt="" width="49.5%"/> <img src="./reshape_con_target16.png" alt="" width="49.5%"/>
+  * <img src="./reshape_con_target33.png" alt="" width="49.5%"/> <img src="./reshape_con_target33.png" alt="" width="49.5%"/>
+  * 發現
+    * 時間對 generation 及 consumption 具有一定程度的影響
+    * generation 的波動差異較大，可能相差到兩倍
+      * target14 及 target33 的每日平均走勢大約維持在 0 ~ 0.7
+      * target16 的每日平均走勢大約維持在 0 ~ 1.4
+    * generation 在縱軸 50 的地方，sample 出來 csv 中，每日平均的走勢皆有明顯下降，或許可以理解為偶爾會遇見陰天，導致大家都產出較少的電力
+    * consumption 在縱軸 3000 之前皆較低（2018/1/1 12:00:00 AM ~ 2018/5/5 11:00:00 PM）
+    * consumption 在縱軸 3000 之後皆較高（2018/5/6 12:00:00 AM ~ 2018/8/31 11:00:00 PM）
 
 ---
+## Bidding Auction（競價行為）
+
+* 買賣電力的依據
+  * 初步想法
+    * 若預測出來的「產電量 < 用電量」，代表電力供不應求，需要買電
+    * 若預測出來的「產電量 > 用電量」，代表電力供過於求，可以賣電
+  * 問題
+    * 預測不可能具有 100% 的準確率，若是超買或是超賣皆會導致虧損
+  * 解決方案
+    * 設定兩個臨界值（threshold）來控制買賣決策，例如設定買臨界值為 0.3、賣臨界值為 0.6，則意義及買賣行動如下
+      * 若預測出來的「產電量 - 用電量 < 0.3」，則買電，而欲買入的電量設定為「用電量 - 產電量 - 0.3」，藉此避免超買
+      * 若預測出來的「產電量 - 用電量 > 0.6」，則賣電，而欲賣出的電量設定為「用電量 - 產電量 - 0.6」，藉此避免超賣
+    * 例子
+      * 買臨界值為 0.3
+        * 產電量 = 0.1、用電量 = 0.8，產電量 - 用電量 = 0.1 - 0.8 = -0.7，意即缺少 0.7 單位的電力，但為了避免超買，所以最終只買 0.7 - 0.3 = 0.4 單位的電力
+      * 賣臨界值為 0.6
+        * 產電量 = 0.8、用電量 = 0.1，產電量 - 用電量 = 0.8 - 0.1 = 0.7，意即多產 0.7 單位的電力，但為了避免超賣，所以最終只買 0.7 - 0.6 = 0.1 單位的電力
+
+* 設定金額的依據
+  * 買
+    * 出價要夠高才買的到電力，但出價要低於市電單價（Market Price），否則參加競標反而會產生更高的花費
+    * 出價要夠低才不會耗費過多不必要的金錢
+  * 賣
+    * 出價要夠低才能將電力賣掉，至少要低於市電單價（Market Price）才會有人買
+    * 出價要夠高才不會少賺太多錢
+  * 初步想法
+    * 第一天還沒有競標結果（如 workflow 圖所示，第一天為 NULL），所以必須先訂出一個價格（買賣的價格都應低於市電單價），依據為 Online Validation Phase 時的資訊
+    * 其餘天數的買賣價格藉由 input 中，過去七天自己的投標資料來決定
+    * 若掛上去賣的電力全部賣出，代表可能賣得太便宜，提高金額
+    * 若掛上去賣的電力沒有全部賣出，代表可能賣得太昂貴，降低金額
+    * 若掛上去買的電力全部買足，代表可能出價太高，降低金額
+    * 若掛上去買的電力沒有全部買足，代表可能出價太低，提高金額
+
+---
+
+## 架構（Architecture）
+
+* Method1: 使用 Sequence-to-Sequence (Seq2Seq) 預測產電量及用電量
+* Method2: 使用 Long short-term memory (LSTM) 預測產電量及用電量
+* Method3: 使用 Moving average (MA) 決定競價金額
 
