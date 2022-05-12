@@ -78,7 +78,7 @@ test the code by running
 ---
 
 ## 工作流程（Workflow）
-<img src="./Workflow.png" alt="Cover" width="50%"/>
+<img src="./workflow.png" alt="Cover" width="50%"/>
 
 ---
 
