@@ -74,3 +74,11 @@ test the code by running
       |    action     |  bidding action（buy／sell）  |      |
       | target_price  |     bidding price（競標價）    | TWD  |
       | target_volume |     bidding volume（競標量）   | kWh  |
+
+---
+
+## 工作流程（Workflow）
+<img src="./Workflow.png" alt="Cover" width="50%"/>
+
+---
+
