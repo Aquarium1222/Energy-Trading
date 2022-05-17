@@ -1,3 +1,7 @@
+import utils.datautils as datautils
+from dataset.energy_dataset import EnergyDataset
+from config import Config
+
 
 # You should not modify this part.
 def config():
@@ -27,3 +31,8 @@ if __name__ == "__main__":
     data = [["2018-01-01 00:00:00", "buy", 2.5, 3],
             ["2018-01-01 01:00:00", "sell", 3, 5]]
     output(args.output, data)
+
+    ds = EnergyDataset(Config.TRAINING_DATA_DIR)
+    train_indices, test_indices = datautils.make_train_test_indices(ds)
+    train_loader = datautils.make_dataloader(ds, train_indices, Config.BATCH_SIZE)
+    test_loader = datautils.make_dataloader(ds, test_indices, Config.BATCH_SIZE)

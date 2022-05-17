@@ -80,7 +80,7 @@ test the code by running
 ---
 
 ## 工作流程（Workflow）
-<img src="./workflow.png" alt="Cover" width="50%"/>
+<img src="analysis_data/workflow.png" alt="Cover" width="50%"/>
 
 * 平台會指定過去七天的資料（cosumption, generation, bidresult）作為參數放進 Agents 程式中
 * Agents 會產出未來一天的投標資訊（以小時為單位，意即一天會有 24 筆資料），並可以透過參數指定輸出路徑
@@ -155,9 +155,9 @@ test the code by running
     * 右中圖為 target16.csv 中的每小時 consumption 走勢（共 5832 筆）
     * 左下圖為 target28.csv 中的每小時 generation 走勢（共 5832 筆）
     * 右下圖為 target28.csv 中的每小時 consumption 走勢（共 5832 筆）
-  * <img src="./generation_target13.png" alt="" width="49.5%"/> <img src="./consumption_target13.png" alt="" width="49.5%"/>
-  * <img src="./generation_target16.png" alt="" width="49.5%"/> <img src="./consumption_target16.png" alt="" width="49.5%"/>
-  * <img src="./generation_target28.png" alt="" width="49.5%"/> <img src="./consumption_target28.png" alt="" width="49.5%"/>
+  * <img src="analysis_data/generation_target13.png" alt="" width="49.5%"/> <img src="analysis_data/consumption_target13.png" alt="" width="49.5%"/>
+  * <img src="analysis_data/generation_target16.png" alt="" width="49.5%"/> <img src="analysis_data/consumption_target16.png" alt="" width="49.5%"/>
+  * <img src="analysis_data/generation_target28.png" alt="" width="49.5%"/> <img src="analysis_data/consumption_target28.png" alt="" width="49.5%"/>
   * 發現
     * 時間對 generation 及 consumption 具有一定程度的影響
     * generation 皆在 0 ~ 5 之間劇烈波動
@@ -173,9 +173,9 @@ test the code by running
     * 右中圖為 target16.csv 中的每日平均 consumption 走勢（共 5832 筆）
     * 左下圖為 target28.csv 中的每日平均 generation 走勢（共 5832 筆）
     * 右下圖為 target28.csv 中的每日平均 consumption 走勢（共 5832 筆）
-  * <img src="./reshape_con_target14.png" alt="" width="49.5%"/> <img src="./reshape_con_target14.png" alt="" width="49.5%"/>
-  * <img src="./reshape_con_target16.png" alt="" width="49.5%"/> <img src="./reshape_con_target16.png" alt="" width="49.5%"/>
-  * <img src="./reshape_con_target33.png" alt="" width="49.5%"/> <img src="./reshape_con_target33.png" alt="" width="49.5%"/>
+  * <img src="analysis_data/reshape_con_target14.png" alt="" width="49.5%"/> <img src="analysis_data/reshape_con_target14.png" alt="" width="49.5%"/>
+  * <img src="analysis_data/reshape_con_target16.png" alt="" width="49.5%"/> <img src="analysis_data/reshape_con_target16.png" alt="" width="49.5%"/>
+  * <img src="analysis_data/reshape_con_target33.png" alt="" width="49.5%"/> <img src="analysis_data/reshape_con_target33.png" alt="" width="49.5%"/>
   * 發現
     * 時間對 generation 及 consumption 具有一定程度的影響
     * generation 的波動差異較大，可能相差到兩倍

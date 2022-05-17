@@ -5,6 +5,11 @@ name = "pypi"
 
 [packages]
 pandas = "==1.2.0"
+numpy = "==1.21.2"
+scikit-learn = "==1.0.2"
+torch = "*"
+torchvision = "*"
+torchaudio = "*"
 
 [dev-packages]
 
