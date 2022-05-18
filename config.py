@@ -7,6 +7,7 @@ class Config:
     G_DS_PATH = './sample_data/generation.csv'
     SCALER_DIR = './'
     SCALER_NAME = 'scaler.pkl'
+    MODEL_NAME = 'seq2seq.hdf5'
 
     DEVICE = initutils.get_device()
 
@@ -18,3 +19,13 @@ class Config:
 
     BATCH_SIZE = 8
     LR = 0.0002
+    EPOCH = 300
+
+    INPUT_DIM = 5
+    OUTPUT_DIM = 5
+    ENC_EMB_DIM = 256
+    DEC_EMB_DIM = 256
+    HID_DIM = 512
+    N_LAYERS = 2
+    ENC_DROPOUT = 0.5
+    DEC_DROPOUT = 0.5

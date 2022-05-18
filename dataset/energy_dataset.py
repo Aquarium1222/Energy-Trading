@@ -36,37 +36,38 @@ class EnergyDataset(Dataset):
         concat_df['weekend'] = weekend_list
         concat_df[['generation', 'consumption']] = \
             datautils.minmax(concat_df[['generation', 'consumption']], Config.SCALER_DIR)
-        concat_df = concat_df.drop(columns=['time'])
-        print('')
+        self.concat_df = concat_df.drop(columns=['time'])
 
         # Making datas
-        incoming_len = Config.INCOMING_DAYS * Config.HOUR_OF_DAY
-        output_len = Config.OUTPUT_DAYS * Config.HOUR_OF_DAY
-        total_len = len(day_list) - (incoming_len + output_len)
-        self.x_list, self.y_list = [], []
-        for s in range(0, total_len, 24):
-            if s % int((total_len / 100)) == 0:
-                print('\rMaking datas ({}%)'.format(int(s / (total_len / 100)+1)), end='', flush=True)
-            e = s + incoming_len
-            x_df = concat_df.iloc[s:e]
-            y_df = concat_df.iloc[e:e+output_len]
-            x = np.array([
-                x_df['day'],
-                x_df['hour'],
-                x_df['weekday'],
-                x_df['generation'],
-                x_df['consumption']
-            ]).transpose()
-            y = np.array([
-                y_df['generation'],
-                y_df['consumption']
-            ]).transpose()
-            self.x_list.append(x)
-            self.y_list.append(y)
-        print('')
+        # (N, L, C)
+        # N: batch size
+        # L: length of sequence
+        # C: number of feature
+        self.incoming_len = Config.INCOMING_DAYS * Config.HOUR_OF_DAY
+        self.output_len = Config.OUTPUT_DAYS * Config.HOUR_OF_DAY
+        self.total_len = int((len(day_list) - (self.incoming_len + self.output_len)) / Config.HOUR_OF_DAY)
+        print('\nTotal len: {}'.format(self.total_len))
 
     def __len__(self):
-        return len(self.x_list)
+        return self.total_len
 
     def __getitem__(self, idx):
-        return self.x_list[idx], self.y_list[idx]
+        s = idx * Config.HOUR_OF_DAY
+        e = s + self.incoming_len
+        x_df = self.concat_df.iloc[s:e]
+        y_df = self.concat_df.iloc[e:e + self.output_len]
+        x = np.array([
+            x_df['day'],
+            x_df['hour'],
+            x_df['weekday'],
+            x_df['generation'],
+            x_df['consumption']
+        ]).transpose()
+        y = np.array([
+            y_df['day'],
+            y_df['hour'],
+            y_df['weekday'],
+            y_df['generation'],
+            y_df['consumption']
+        ]).transpose()
+        return x, y
