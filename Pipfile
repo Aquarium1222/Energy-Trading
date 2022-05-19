@@ -12,6 +12,7 @@ torchvision = "*"
 torchaudio = "*"
 pickle-mixin = "*"
 jupyter = "*"
+matplotlib = "*"
 
 [dev-packages]
 
