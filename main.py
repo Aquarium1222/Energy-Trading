@@ -33,16 +33,3 @@ if __name__ == "__main__":
     data = [["2018-01-01 00:00:00", "buy", 2.5, 3],
             ["2018-01-01 01:00:00", "sell", 3, 5]]
     output(args.output, data)
-    import sys
-    import time
-    from collections import deque
-
-    queue = deque([], 3)
-    for t in range(20):
-        time.sleep(0.5)
-        s = "update %d" % t
-        for _ in range(len(queue)):
-            sys.stdout.write("\x1b[1A\x1b[2K")
-        queue.append(s)
-        for i in range(len(queue)):
-            sys.stdout.write(queue[i] + "\n")

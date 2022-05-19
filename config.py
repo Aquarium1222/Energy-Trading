@@ -8,7 +8,7 @@ class Config:
     SCALER_DIR = './'
     SCALER_NAME = 'scaler.pkl'
     CHECKPOINT_DIR = './checkpoint/'
-    MODEL_NAME = 'seq2seq.hdf5'
+    MODEL_NAME = 'checkpoint_200.hdf5'
 
     DEVICE = initutils.get_device()
 
