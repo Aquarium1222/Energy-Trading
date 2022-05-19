@@ -173,9 +173,9 @@ test the code by running
     * 右中圖為 target16.csv 中的每日平均 consumption 走勢（共 5832 筆）
     * 左下圖為 target28.csv 中的每日平均 generation 走勢（共 5832 筆）
     * 右下圖為 target28.csv 中的每日平均 consumption 走勢（共 5832 筆）
-  * <img src="analysis_data/reshape_con_target14.png" alt="" width="49.5%"/> <img src="analysis_data/reshape_con_target14.png" alt="" width="49.5%"/>
-  * <img src="analysis_data/reshape_con_target16.png" alt="" width="49.5%"/> <img src="analysis_data/reshape_con_target16.png" alt="" width="49.5%"/>
-  * <img src="analysis_data/reshape_con_target33.png" alt="" width="49.5%"/> <img src="analysis_data/reshape_con_target33.png" alt="" width="49.5%"/>
+  * <img src="analysis_data/reshape_gen_target14.png" alt="" width="49.5%"/> <img src="analysis_data/reshape_con_target14.png" alt="" width="49.5%"/>
+  * <img src="analysis_data/reshape_gen_target16.png" alt="" width="49.5%"/> <img src="analysis_data/reshape_con_target16.png" alt="" width="49.5%"/>
+  * <img src="analysis_data/reshape_gen_target33.png" alt="" width="49.5%"/> <img src="analysis_data/reshape_con_target33.png" alt="" width="49.5%"/>
   * 發現
     * 時間對 generation 及 consumption 具有一定程度的影響
     * generation 的波動差異較大，可能相差到兩倍
