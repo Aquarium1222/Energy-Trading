@@ -35,7 +35,7 @@ class EnergyDataset(Dataset):
         concat_df['weekday'] = (datautils.cyclical_encoding(weekday_list, Config.DAY_OF_WEEK) + 1) / 2
         concat_df['weekend'] = weekend_list
         concat_df[['generation', 'consumption']] = \
-            datautils.minmax(concat_df[['generation', 'consumption']], Config.SCALER_DIR)
+            datautils.minmax(concat_df[['generation', 'consumption']], True)
         self.concat_df = concat_df.drop(columns=['time'])
 
         # Making datas

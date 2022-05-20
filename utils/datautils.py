@@ -31,14 +31,22 @@ def make_dataloader(dataset, indices, batch_size):
     return DataLoader(dataset, batch_size=batch_size, sampler=sampler)
 
 
-def minmax(df, output_dir=''):
-    scaler = MinMaxScaler()
-    tran_df = scaler.fit_transform(df)
-    if output_dir != '':
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-        dump_pickle(scaler, os.path.join(output_dir, Config.SCALER_NAME))
+def minmax(df, save=False):
+    if os.path.exists(Config.SCALER_DIR + Config.SCALER_NAME):
+        scaler = load_pickle(Config.SCALER_DIR + Config.SCALER_NAME)
+    else:
+        scaler = MinMaxScaler()
+        scaler.fit(df)
+    tran_df = scaler.transform(df)
+    if save:
+        dump_pickle(scaler, os.path.join(Config.SCALER_DIR, Config.SCALER_NAME))
     return tran_df
+
+
+def inverse_minmax(data):
+    scaler = load_pickle(Config.SCALER_DIR + Config.SCALER_NAME)
+    inverse_data = scaler.inverse_transform(data)
+    return inverse_data
 
 
 def dump_pickle(data, path):
