@@ -30,3 +30,11 @@ class Config:
     N_LAYERS = 2
     ENC_DROPOUT = 0.5
     DEC_DROPOUT = 0.5
+
+    GEN_LOSS = 0.00067
+    CON_LOSS = 0.00067
+
+    BUY_INIT_PRICE = 2.52
+    SELL_INIT_PRICE = 2.52
+
+    THRESHOLD = 0.7
