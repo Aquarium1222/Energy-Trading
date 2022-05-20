@@ -26,7 +26,7 @@ def train(model, loader, optimizer, criterion):
 
         optimizer.zero_grad()
         output = model(x, y)
-        # loss = criterion(output, y)
+
         day_loss = criterion(output[:, :, 0], y[:, :, 0])
         hour_loss = criterion(output[:, :, 1], y[:, :, 1])
         weekday_loss = criterion(output[:, :, 2], y[:, :, 2])
@@ -53,21 +53,39 @@ def train(model, loader, optimizer, criterion):
     print('--Loss weekday: {}'.format(epoch_weekday_loss / len(loader)))
     print('--Loss generation: {}'.format(epoch_gen_loss / len(loader)))
     print('--Loss consumption: {}'.format(epoch_con_loss / len(loader)))
-    return epoch_loss / len(loader)
+    return epoch_loss / len(loader), epoch_gen_loss / len(loader), epoch_con_loss / len(loader)
 
 
 def test(model, loader, criterion):
     model.eval()
     epoch_loss = 0
+    epoch_day_loss = 0
+    epoch_hour_loss = 0
+    epoch_weekday_loss = 0
+    epoch_gen_loss = 0
+    epoch_con_loss = 0
     with torch.no_grad():
         for i, (x, y) in enumerate(loader):
             x = x.to(torch.float32).to(Config.DEVICE).permute(1, 0, 2)
             y = y.to(torch.float32).to(Config.DEVICE).permute(1, 0, 2)
 
             output = model(x, y, 0)
-            loss = criterion(output, y)
+
+            day_loss = criterion(output[:, :, 0], y[:, :, 0])
+            hour_loss = criterion(output[:, :, 1], y[:, :, 1])
+            weekday_loss = criterion(output[:, :, 2], y[:, :, 2])
+            gen_loss = criterion(output[:, :, 3], y[:, :, 3])
+            con_loss = criterion(output[:, :, 4], y[:, :, 4])
+
+            epoch_day_loss += day_loss.item()
+            epoch_hour_loss += hour_loss.item()
+            epoch_weekday_loss += weekday_loss.item()
+            epoch_gen_loss += gen_loss.item()
+            epoch_con_loss += con_loss.item()
+            loss = day_loss + hour_loss + weekday_loss + gen_loss + con_loss
+
             epoch_loss += loss.item()
-    return epoch_loss / len(loader)
+    return epoch_loss / len(loader), epoch_gen_loss / len(loader), epoch_con_loss / len(loader)
 
 
 if __name__ == '__main__':
@@ -86,19 +104,35 @@ if __name__ == '__main__':
     criterion = nn.MSELoss()
 
     train_loss_list = []
+    train_gen_loss_list = []
+    train_con_loss_list = []
     test_loss_list = []
+    test_gen_loss_list = []
+    test_con_loss_list = []
 
     for e in range(Config.EPOCH):
         print('Epoch: {}'.format(e))
-        train_loss = train(model, train_loader, optimizer, criterion)
-        test_loss = test(model, test_loader, criterion)
+        train_loss, train_gen_loss, train_con_loss = train(model, train_loader, optimizer, criterion)
+        test_loss, test_gen_loss, test_con_loss = test(model, test_loader, criterion)
         train_loss_list.append(train_loss)
+        train_gen_loss_list.append(train_gen_loss)
+        train_con_loss_list.append(train_con_loss)
         test_loss_list.append(test_loss)
+        test_gen_loss_list.append(test_gen_loss)
+        test_con_loss_list.append(test_con_loss)
         print('--Train loss: {}'.format(train_loss))
+        print('--Train generation loss: {}'.format(train_gen_loss))
+        print('--Train consumption loss: {}'.format(train_con_loss))
         print('--Test loss: {}'.format(test_loss))
+        print('--Test generation loss: {}'.format(test_gen_loss))
+        print('--Test consumption loss: {}'.format(test_con_loss))
         if e % 10 == 0:
             torch.save(model, Config.CHECKPOINT_DIR + 'checkpoint_' + str(e) + '.hdf5')
 
     torch.save(model, Config.MODEL_NAME)
     visualizeutils.plot_loss(range(Config.EPOCH), train_loss_list, 'Train_loss', True)
+    visualizeutils.plot_loss(range(Config.EPOCH), train_gen_loss_list, 'Train_generation_loss', True)
+    visualizeutils.plot_loss(range(Config.EPOCH), train_con_loss_list, 'Train_consumption_loss', True)
     visualizeutils.plot_loss(range(Config.EPOCH), test_loss_list, 'Test_loss', True)
+    visualizeutils.plot_loss(range(Config.EPOCH), test_gen_loss_list, 'Test_generation_loss', True)
+    visualizeutils.plot_loss(range(Config.EPOCH), test_con_loss_list, 'Test_consumption_loss', True)

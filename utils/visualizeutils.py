@@ -8,3 +8,6 @@ def plot_loss(x, y, title, save=False):
     plt.title(title)
     if save:
         plt.savefig(title + '.png')
+    else:
+        plt.show()
+    plt.clf()

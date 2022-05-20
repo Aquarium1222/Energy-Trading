@@ -60,6 +60,7 @@ class EnergyDataset(Dataset):
             x_df['day'],
             x_df['hour'],
             x_df['weekday'],
+            # x_df['weekend'],
             x_df['generation'],
             x_df['consumption']
         ]).transpose()
@@ -67,6 +68,7 @@ class EnergyDataset(Dataset):
             y_df['day'],
             y_df['hour'],
             y_df['weekday'],
+            # y_df['weekend'],
             y_df['generation'],
             y_df['consumption']
         ]).transpose()
