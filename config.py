@@ -31,8 +31,8 @@ class Config:
     ENC_DROPOUT = 0.5
     DEC_DROPOUT = 0.5
 
-    GEN_LOSS = 0.00067
-    CON_LOSS = 0.00067
+    GEN_LOSS = 0.000625
+    CON_LOSS = 0.002313
 
     BUY_INIT_PRICE = 2.52
     SELL_INIT_PRICE = 2.52
