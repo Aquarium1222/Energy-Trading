@@ -127,6 +127,14 @@ test the code by running
 
 ---
 
+## 媒合 (Bidding match)
+
+* 買賣曲線不一定會有交叉點
+* 成交量最高是：min(委買量，委賣量)
+* 價高者得，一樣出價者按投標量比例分配，因此會有部份成交
+
+---
+
 ## 分析（Analysis）
 
 * 會影響電費計算之主要因素
@@ -186,15 +194,15 @@ test the code by running
     * consumption 在縱軸 3000 之後皆較高（2018/5/6 12:00:00 AM ~ 2018/8/31 11:00:00 PM）
 
 ---
-## Bidding Auction（競價行為）
+## 競價行為 (Bidding Auction)
 
 * 買賣電力的依據
-  * 初步想法
+  * 買賣時機
     * 若預測出來的「產電量 < 用電量」，代表電力供不應求，需要買電
     * 若預測出來的「產電量 > 用電量」，代表電力供過於求，可以賣電
   * 問題
     * 預測不可能具有 100% 的準確率，若是超買或是超賣皆會導致虧損
-  * 解決方案
+  * 初步想法
     * 設定兩個臨界值（threshold）來控制買賣決策，例如設定買臨界值為 0.3、賣臨界值為 0.6，則意義及買賣行動如下
       * 若預測出來的「產電量 - 用電量 < 0.3」，則買電，而欲買入的電量設定為「用電量 - 產電量 - 0.3」，藉此避免超買
       * 若預測出來的「產電量 - 用電量 > 0.6」，則賣電，而欲賣出的電量設定為「用電量 - 產電量 - 0.6」，藉此避免超賣
@@ -222,8 +230,16 @@ test the code by running
 ---
 
 ## 架構（Architecture）
+### 資料前處理 - time
+* 將 time 分為 day, hour, weekday, weekend，並針對 day, hour, weekday 使用 cyclical encoding
+  * 使用 cyclical encoding 可以將時機特徵轉為週期特徵
+  * 例如一天有二十四個小時 (00:00, 01:00,...,23:00)，若直接編碼會導致 00:00 和 23:00 差異很大，而使用 cyclical encoding 則可以讓每一個小時的編碼差異一致，意即從 23:00 到 00:00 是間隔 1 單位、而從 00:00 到 01:00 也是間隔 1 單位
+  * 因為已經將 time 細分為 day, hour, weekday, weekend，因此可以將 time 這項資訊刪除不使用，使用 day, hour, weekday, weekend 便足以得到 time 的完整資訊
 
-* Method1: 使用 Sequence-to-Sequence (Seq2Seq) 預測產電量及用電量
-* Method2: 使用 Long short-term memory (LSTM) 預測產電量及用電量
-* Method3: 使用 Moving average (MA) 決定競價金額
+### 資料前處理 - generation and consumption
+* 由於產電量與用電量的大小差異極大，因此先對產電量與用電量作 minmax，讓所有值介於 0 ~ 1 之間
+* 接著再利用歷史的產電量資料與歷史的用電量資料，去預測未來的產電量與用電量
+* 預測出來的值如果小於 0 則直接刪除，而其餘大於等於零的值將被映射回真實的值
+
+### 預測所使用的架構
 
