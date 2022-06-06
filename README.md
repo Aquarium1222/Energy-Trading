@@ -242,4 +242,10 @@ test the code by running
 * 預測出來的值如果小於 0 則直接刪除，而其餘大於等於零的值將被映射回真實的值
 
 ### 預測所使用的架構
+* <img src="./Architecture.png" alt="Cover" width="60%"/>
+* 架構如上圖，每一個方框中皆為 LSTM
+
+* <img src="./BlueArchitecture.png" alt="Cover" width="60%"/>
+* teacher_forcing_ratio 為 0.5，意思是每一個藍色方框並非每次皆接收前一項的輸出來當輸入，而是有 0.5 的機率會拿真實資料來當輸入
+
 
