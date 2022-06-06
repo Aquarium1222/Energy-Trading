@@ -241,7 +241,10 @@ test the code by running
 * 接著再利用歷史的產電量資料與歷史的用電量資料，去預測未來的產電量與用電量
 * 預測出來的值如果小於 0 則直接刪除，而其餘大於等於零的值將被映射回真實的值
 
-### 預測所使用的架構
+### Framework - Sequence-to-Sequence (Seq2Seq)
+* <img src="./Seq2Seq_framework.png" alt="Cover" width="50%"/>
+
+#### teacher_forcing_ratio
 * <img src="./Architecture.png" alt="Cover" width="60%"/>
 * 架構如上圖，每一個方框中皆為 LSTM
 
